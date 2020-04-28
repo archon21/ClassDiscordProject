@@ -8,11 +8,31 @@
   </head>
   <body>
     <div class="flex row">
-      <span>Hello</span>
-      <span>Hello</span>
-      <span>Hello</span>
-      <span>Hello</span>
-      <span>Hello</span>
+      <div id="url" class="flex column">
+        <input id="url-input" type="text" />
+        <button id="url-button">Download</button>
+      </div>
     </div>
   </body>
+  <script>
+    const button = document.getElementById('url-button');
+    button.addEventListener('click', handleSubmit);
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const urlInput = document.getElementById('url-input');
+      const url = urlInput.value;
+      const res = await fetch('/api/download', {
+        method: 'POST',
+        body: JSON.stringify({ url }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await res.json();
+      const img = document.createElement('img');
+      img.setAttribute('src', data.thumbnail_url);
+      document.getElementById('url').innerHTML = img;
+      console.log(res.json());
+    }
+  </script>
 </html>
